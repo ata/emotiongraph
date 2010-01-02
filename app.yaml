@@ -1,0 +1,41 @@
+application: emotiongraph
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /xd_receiver.htm
+  static_files: static/xd_receiver.htm
+  upload: static/xd_receiver.htm
+
+- url: /blueprint
+  static_dir: static/blueprint
+
+- url: /(.*\.(gif|png|jpg))
+  static_files: static/img/\1
+  upload: static/img/(.*\.(gif|png|jpg))
+
+- url: /(.*\.js)
+  static_files: static/js/\1
+  upload: static/js/(.*\.js)
+  
+- url: /(.*\.css)
+  static_files: static/css/\1
+  upload: static/css/(.*\.css)
+
+- url: /latihan.*
+  script: latihan.py
+  
+- url: /static
+  static_dir: static
+  expiration: 1d
+
+- url: /shell.*
+  script: shell.py
+  
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+  
+- url: /.*
+  script: main.py
