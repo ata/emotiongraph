@@ -4,13 +4,10 @@ from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp import util
 from facebook import webappfb
-from models import fb
+from models import *
 from base import BaseRequestHandler
 from datetime import datetime
 
-class Article(db.Model):
-    title = db.StringProperty()
-    content = db.StringProperty(multiline=True)
 
 class MainHandler(BaseRequestHandler):
     def get(self):
@@ -23,6 +20,7 @@ class FacebookHandler(webappfb.FacebookCanvasHandler,BaseRequestHandler):
     require_app = True
     need_session = True
     check_session = True
+    
     
     def get(self):
         
@@ -40,7 +38,7 @@ class FacebookHandler(webappfb.FacebookCanvasHandler,BaseRequestHandler):
         #                    status_id = status['status_id'],
         #                    message = status['message'],
         #                    time = datetime.fromtimestamp(status['time'])).save()
-        status = self.facebook.status.get()
+        status = self.facebook.status.get('700560419',10)
         self.response.out.write(status[0]['message'])
         
         #users = fb.User.fetch_empty_name()

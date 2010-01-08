@@ -11,6 +11,13 @@ handlers:
 - url: /blueprint
   static_dir: static/blueprint
 
+- url: /admin.*
+  script: $PYTHON_LIB/google/appengine/ext/admin/__init__.py
+  login: admin
+  
+- url: /admin
+  static_dir: $PYTHON_LIB/google/appengine/ext/admin/template
+
 - url: /(.*\.(gif|png|jpg))
   static_files: static/img/\1
   upload: static/img/(.*\.(gif|png|jpg))
@@ -36,6 +43,7 @@ handlers:
 - url: /remote_api
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin
+
   
 - url: /.*
   script: main.py

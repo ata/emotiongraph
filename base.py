@@ -1,6 +1,7 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
+
 import config
 import os
 
@@ -15,4 +16,3 @@ class BaseRequestHandler(webapp.RequestHandler):
     def render(self,template_name,template_vars={}):
         template_path = self.get_template(template_name)
         self.response.out.write(template.render(template_path, template_vars))
-    
