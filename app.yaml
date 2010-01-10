@@ -4,9 +4,9 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /xd_receiver.htm
-  static_files: static/xd_receiver.htm
-  upload: static/xd_receiver.htm
+- url: /xd_receiver.html
+  static_files: static/xd_receiver.html
+  upload: static/xd_receiver.html
 
 - url: /blueprint
   static_dir: static/blueprint
@@ -18,9 +18,9 @@ handlers:
 - url: /admin
   static_dir: $PYTHON_LIB/google/appengine/ext/admin/template
 
-- url: /(.*\.(gif|png|jpg))
+- url: /(.*\.(gif|png|jpg|ico))
   static_files: static/img/\1
-  upload: static/img/(.*\.(gif|png|jpg))
+  upload: static/img/(.*\.(gif|png|jpg|ico))
 
 - url: /(.*\.js)
   static_files: static/js/\1
@@ -33,9 +33,9 @@ handlers:
 - url: /latihan.*
   script: latihan.py
   
-- url: /static
-  static_dir: static
-  expiration: 1d
+- url: /trainning.*
+  script: trainning.py
+
 
 - url: /shell.*
   script: shell.py

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script type="text/javascript">FB.init("{{ api_key }}", "/xd_receiver.html");</script>
+<fb:login-button v="2" onlogin='window.location="{{ uri }}";' size="large">Connect</fb:login-button>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

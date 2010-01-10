@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1></h1>
+{% endblock %}
+
+{% block sidebar %}
+    <ul id="friends">
+    {% for uid in friends %}
+        <li>
+        <a href="#">
+            <fb:profile-pic uid="{{uid}}" height="20px"></fb:profile-pic>
+            <fb:name uid="{{uid}}" capitalize="true" linked="false"></fb:name>
+        </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
