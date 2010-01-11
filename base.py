@@ -1,6 +1,6 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
-
+from models import *
 
 import facebook
 import config
@@ -51,6 +51,7 @@ class BaseRequestHandler(webapp.RequestHandler):
 class FacebookConnectHandler(BaseRequestHandler):
     
     def initialize(self, request, response):
+        
         super(FacebookConnectHandler, self).initialize(request, response)
         config = yaml.load(file('facebook.yaml', 'r'))
         self.api_key = config['api_key']
@@ -65,9 +66,18 @@ class FacebookConnectHandler(BaseRequestHandler):
                                         'api_key': self.api_key})
             return
         try:
-            self.fbuser = self.facebook.users.getInfo(
-                        [self.facebook.uid],
-                        ['uid', 'name', 'birthday', 'relationship_status'])[0]
+            query = User.all().filter('uid = ', self.facebook.uid)
+            
+            if query.count() == 0:
+                fbuser = self.facebook.users.getInfo(
+                                [self.facebook.uid],
+                                ['uid', 'name'])[0]
+                self.user = User(uid = fbuser['uid'], name = fbuser['name'])
+                self.user.friends = self.facebook.friends.get()
+                self.user.tranning_queue = self.user.friends
+                self.user.save()
+            else:
+                self.user = query.fetch(10)[0]
                 
         except facebook.FacebookError:
           self.render('fbconnect.html',{'uri':self.request.uri, 
