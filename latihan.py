@@ -16,9 +16,11 @@ class ArticleListHandler(BaseRequestHandler):
         self.render('latihan.html',{'articles':Article.all()})
         
     def post(self,key):
-        Article(title=self.request.get('title'),
-                content=self.request.get('content')).put()
-        self.get(key)
+        self.response.out.write('out')
+        self.response.out.write(self.request.get_all('title'))
+        #Article(title=self.request.get('title'),
+        #        content=self.request.get('content')).put()
+        #self.get(key)
 
 def main():
     application = webapp.WSGIApplication([

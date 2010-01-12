@@ -1,0 +1,30 @@
+{% extends '../base.html' %}
+
+<script type="text/javascript">
+    
+</script>
+
+{% block content %}
+
+<h3 class="alt">Grafik Hasil Trainning</h3>
+<img src="{{chart}}"/>
+
+<div class="box">
+    <h3 class="alt">Static Trainning</h3>
+    Total Trainning: {{static.total}} <br/>
+    senang: {{static.senang}}<br/>
+    sedih: {{static.sedih}}<br/>
+    marah: {{static.marah}} <br/>
+    jijik: {{static.jijik}}<br/>
+    malu: {{static.malu}}<br/>
+    takut: {{static.takut}}<br/>
+    bersalah: {{static.bersalah}}<br/>
+    uncategory: {{static.uncategory}}
+</div>
+
+{% endblock %}
+
+
+{% block sidebar %}
+  
+{% endblock %}

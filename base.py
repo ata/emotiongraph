@@ -58,9 +58,10 @@ class FacebookConnectHandler(BaseRequestHandler):
         self.secret_key = config['secret_key']
         self.facebook = facebook.Facebook(self.api_key, self.secret_key)
         
-       
+    def connected(self, *args, **kwargs):
+        raise NotImplementedError()
           
-    def get(self):
+    def get(self,*args, **kwargs):
         if not self.facebook.check_session(self.request):
             self.render('fbconnect.html',{'uri':self.request.uri, 
                                         'api_key': self.api_key})
@@ -83,6 +84,5 @@ class FacebookConnectHandler(BaseRequestHandler):
           self.render('fbconnect.html',{'uri':self.request.uri, 
                                         'api_key': self.api_key})
           return
-          
-        self.connected()
+        self.connected(*args, **kwargs)
         

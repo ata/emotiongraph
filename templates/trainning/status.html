@@ -1,0 +1,66 @@
+{% extends 'index.html' %}
+{% block content%}
+<div id="status_container">
+    <h3 class="alt">
+        Trainning Status - 
+        <fb:name uid="{{uid}}" capitalize="true" linked="false"></fb:name>
+    </h3>
+    <form method="post" id="form_status">
+        <table id="table_status">
+            <thead>
+                <tr>
+                    <th>Message</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for status in states %}
+                <tr>
+                    <td>
+                        {{status.message}}
+                        <input type="hidden" name="key" value="{{status.key}}"/>
+                    </td>
+                    <td>
+                        <select name="category">
+                            <option value="uncategory" selected="selected">Uncategory</option>
+                            <option value="senang">Senang</option>
+                            <option value="sedih">Sedih</option>
+                            <option value="marah">Marah</option>
+                            <option value="jijik">Jijik</option>
+                            <option value="malu">Malu</option>
+                            <option value="takut">Takut</option>
+                            <option value="bersalah">Bersalah</option>
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <thead>
+                <tr>
+                    <th colspan="2"><input type="submit" value="update"/></th>
+                </tr>
+            </thead>
+        </table>        
+    </form>
+</div>
+
+<br/><br/>
+<div class="box">
+    <h3 class="alt">Static Trainning</h3>
+    Total Trainning: {{static.total}} <br/>
+    senang: {{static.senang}}<br/>
+    sedih: {{static.sedih}}<br/>
+    marah: {{static.marah}} <br/>
+    jijik: {{static.jijik}}<br/>
+    malu: {{static.malu}}<br/>
+    takut: {{static.takut}}<br/>
+    bersalah: {{static.bersalah}}<br/>
+    uncategory: {{static.uncategory}}
+</div>
+
+<script type="text/javascript">
+    $$('table tbody > tr:nth-child(even)').each(function(e){e.addClassName('even')})
+</script>
+
+{% endblock%}
+

@@ -35,6 +35,9 @@ handlers:
   
 - url: /trainning.*
   script: trainning.py
+  
+- url: /graph.*
+  script: graph.py
 
 
 - url: /shell.*

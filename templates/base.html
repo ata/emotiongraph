@@ -22,7 +22,7 @@
     
 </head>
 <body>
-<div class="container">
+<div class="container" id="container">
     <div class="span-24 last" id="header">
     {% block header %}
         <h1 class="alt">Emo Graph</h1>
@@ -31,22 +31,22 @@
     
     <div class="span-24 last" id="menu">
         <ul>
-            <li><a href="home">Home</a></li>
-            <li><a href="home">Graph</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/graph/index.php">Graph</a></li>
             <li><a href="/trainning/index.php">Trainning</a></li>
-            <li><a href="home">About</a></li>
             <li><a href="/shell.php">Shell</a></li>
+            <li><a href="/about.php">About</a></li>
         </ul>
     </div>
     <hr/>
     
-    <div class="span-17 colborder" id="content">
+    <div class="span-16 colborder" id="content">
     {% block content %}
         <p>This is content</p>
     {% endblock %}
     </div>
     
-    <div class="span-6 last" id="sidebar">
+    <div class="span-7 last" id="sidebar">
         {% block sidebar %}
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         {% endblock %}
