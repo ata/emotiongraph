@@ -13,7 +13,7 @@ class IndexHander(base.BaseRequestHandler):
 
 def main():
     application = webapp.WSGIApplication([
-        ('/graph/index.php',IndexHander),
+        (r'/graph/index.php',IndexHander),
         ],debug=True)
         
     util.run_wsgi_app(application)
