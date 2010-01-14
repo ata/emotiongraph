@@ -13,9 +13,87 @@ indexes:
 - kind: Keyword
   properties:
   - name: valid
+  - name: bersalah
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: bersalah
+    direction: desc
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: jijik
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: jijik
+    direction: desc
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: malu
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: malu
+    direction: desc
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: marah
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: marah
+    direction: desc
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: sedih
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: sedih
+    direction: desc
+
+- kind: Keyword
+  properties:
+  - name: valid
   - name: senang
 
 - kind: Keyword
   properties:
   - name: valid
+  - name: senang
+    direction: desc
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: takut
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: takut
+    direction: desc
+
+- kind: Keyword
+  properties:
+  - name: valid
   - name: word
+
+- kind: Keyword
+  properties:
+  - name: valid
+  - name: word
+    direction: desc

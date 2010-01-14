@@ -88,14 +88,6 @@ Python {{ python_version }}
 
 <p id="ajax-status"></p>
 <br/>
-<p id="toolbar">
-{% if user %}
-  <span class="username">{{ user.nickname }}</span>
-  (<a href="{{ logout_url }}">log out</a>)
-{% else %}
-  <a href="{{ login_url }}">log in</a>
-{% endif %}
- | Ctrl-Up for history | Shift-Enter for newline
 
 <script type="text/javascript">
 document.getElementById('statement').focus();

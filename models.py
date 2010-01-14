@@ -3,13 +3,29 @@ from datetime import datetime
 import re
 
 class User(db.Model):
-    uid = db.IntegerProperty(required=True)
+    uid = db.IntegerProperty()
     name = db.StringProperty()
-    friends = db.ListProperty(long)
-    tranning_queue = db.ListProperty(long)
+    login = db.UserProperty(auto_current_user_add = True)
     def save(self):
-        if db.Query(User).filter('uid = ', self.uid).count() == 0:
+        if User.all().filter('uid = ', self.uid).count() == 0:
             self.put()
+
+class Friend(db.Model):
+    user = db.ReferenceProperty(reference_class = User, collection_name = 'friends')
+    uid = uid = db.IntegerProperty(required=True)
+    trainning = db.BooleanProperty()
+    
+    def save(self):
+        if Friend.all().filter('uid = ', self.uid).count() == 0:
+            self.put()
+    
+    @classmethod
+    def get_trainnings(cls,user, count = 20, offset = 0):
+        query = Friend.all().filter('user = ',user).filter('trainning = ',True)
+        if query.count() == 0:
+            return False
+        else:
+            return query.fetch(count, offset)
 
 class Keyword(db.Model):
     word = db.StringProperty(required = True)
@@ -25,12 +41,12 @@ class Keyword(db.Model):
     @classmethod
     def update(cls, status):
         #keyword smiley
-        custume = re.findall(r'%s' % (CustumeKeyword.get_rstring()), status.message)
+        #custume = re.findall(r'%s' % (CustumeKeyword.get_rstring()), status.message)
         
         # Keyword string
-        words = re.findall(r'\w+', status.message)
+        words = re.findall(r'[a-zA-Z]+', status.message)
         
-        keywords = words + custume
+        keywords = words #+ custume
         
         for word in keywords:
             query = db.Query(Keyword).filter('word = ',word.lower())
@@ -89,27 +105,5 @@ def data_clean(*args):
                 e.delete()
 
 
-def get_trainning_static():
-    return {
-            'total':Status.all().filter('category != ',None).count(),
-            'senang':Status.all().filter('category = ','senang').count(),
-            'sedih':Status.all().filter('category = ','sedih').count(),
-            'marah':Status.all().filter('category = ','marah').count(),
-            'malu':Status.all().filter('category = ','malu').count(),
-            'bersalah':Status.all().filter('category = ','bersalah').count(),
-            'jijik':Status.all().filter('category = ','jijik').count(),
-            'takut':Status.all().filter('category = ','takut').count(),
-            'uncategory':Status.all().filter('category = ','uncategory').count()
-            }
-            
-def get_trainning_chart():
-    base_url = 'http://chart.apis.google.com/chart?cht=p3'
-    static = get_trainning_static()
-    data = '&chd=t:%d,%d,%d,%d,%d,%d,%d,%d&chs=500x200' % (\
-            static['senang'],static['sedih'],static['marah'],\
-            static['malu'],static['bersalah'],static['jijik'],\
-            static['takut'],static['uncategory'])
-    label = '&chl=senang|sedih|marah|malu|bersalah|jijik|takut|uncategory'
-    return base_url + data + label
-    
+
     

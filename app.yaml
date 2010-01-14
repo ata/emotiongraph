@@ -32,16 +32,20 @@ handlers:
 
 - url: /latihan.*
   script: latihan.py
+  login: required
   
 - url: /trainning.*
   script: trainning.py
-  
+  login: required
+
 - url: /graph.*
   script: graph.py
+  login: required
 
 
 - url: /shell.*
   script: shell.py
+  login: admin
   
 - url: /remote_api
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py

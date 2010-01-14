@@ -1,0 +1,152 @@
+{% extends '../base.html' %}
+{% block content%}
+    <div>
+        <label>Show</label>
+        <select>
+            <option onclick="window.location='/trainning/keyword/{{show}}.php';" selected="selected"><b>{{show}}</b></option>
+            <option onclick="window.location='/trainning/keyword/valid.php';">valid</option>
+            <option onclick="window.location='/trainning/keyword/invalid.php';">invalid</option>
+        </select>
+        <label>Entry Page</label>
+        <select>
+            <option onclick="window.location='/trainning/keyword/{{show}}/{{order}}/{{count}}.php';" selected="selected"><b>{{count}}</b></option>
+            <option onclick="window.location='/trainning/keyword/{{show}}/{{order}}/10.php';">10</option>
+            <option onclick="window.location='/trainning/keyword/{{show}}/{{order}}/25.php';">25</option>
+            <option onclick="window.location='/trainning/keyword/{{show}}/{{order}}/50.php';">50</option>
+            <option onclick="window.location='/trainning/keyword/{{show}}/{{order}}/100.php';">100</option>
+        </select>
+        
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="10" style="border-bottom:5px solid #fff">
+                    {% if first %}
+                        <span style="color:#aaa">&lt;&lt;prev-{{count}}</span>
+                    {% else %}
+                        <a href="/trainning/keyword/{{show}}/{{order}}/{{count}}/{{prev_page}}.php">&lt;&lt;prev-{{count}}</a>
+                    {% endif %}
+                    | <b>{{current}}</b> |
+                    
+                    {% if last %}
+                        <span style="color:#aaa">next-{{count}}&gt;&gt;</span>
+                    {% else %}
+                        <a href="/trainning/keyword/{{show}}/{{order}}/{{count}}/{{next_page}}.php">next-{{count}}&gt;&gt;</a>
+                    {% endif %}
+                </th>
+            </tr>
+            <tr>
+                <th>Id</th>
+            
+                {% ifequal order 'word'%}
+                    <th><a href="/trainning/keyword/{{show}}/-word.php">word &uarr;</a></th>
+                {% else%}{% ifequal order '-word'%}
+                    <th><a href="/trainning/keyword/{{show}}/word.php">word &darr;</a></th>
+                {% else %}
+                    <th><a href="/trainning/keyword/{{show}}/word.php">word</a></th>
+                {% endifequal %}{% endifequal %}
+                
+                {% ifequal order 'senang'%}
+                    <th><a href="/trainning/keyword/{{show}}/-senang.php">senang &darr;</a></th>
+                {% else %}{% ifequal order '-senang'%}
+                    <th><a href="/trainning/keyword/{{show}}/senang.php">senang &uarr;</a></th>
+                {% else %}
+                    <th><a href="/trainning/keyword/{{show}}/-senang.php">senang</a></th>
+                {% endifequal %}{% endifequal %}
+                
+                {% ifequal order 'sedih'%}
+                    <th><a href="/trainning/keyword/{{show}}/-sedih.php">sedih &darr;</a></th>
+                {% else %}{% ifequal order '-sedih'%}
+                    <th><a href="/trainning/keyword/{{show}}/sedih.php">sedih &uarr;</a></th>
+                {% else %}
+                    <th><a href="/trainning/keyword/{{show}}/-sedih.php">sedih</a></th>
+                {% endifequal %}{% endifequal %}
+                
+                {% ifequal order 'takut'%}
+                    <th><a href="/trainning/keyword/{{show}}/-takut.php">takut &darr;</a></th>
+                {% else %}{% ifequal order '-takut'%}
+                    <th><a href="/trainning/keyword/{{show}}/takut.php">takut &uarr;</a></th>
+                {% else %}
+                    <th><a href="/trainning/keyword/{{show}}/-takut.php">takut</a></th>
+                {% endifequal %}{% endifequal %}
+                
+                {% ifequal order 'marah'%}
+                    <th><a href="/trainning/keyword/{{show}}/-marah.php">marah &darr;</a></th>
+                {% else %}{% ifequal order '-marah'%}
+                    <th><a href="/trainning/keyword/{{show}}/marah.php">marah &uarr;</a></th>
+                {% else %}
+                    <th><a href="/trainning/keyword/{{show}}/-marah.php">marah</a></th>
+                {% endifequal %}{% endifequal %}
+                    
+                {% ifequal order 'jijik'%}
+                    <th><a href="/trainning/keyword/{{show}}/-jijik.php">jijik &darr;</a></th>
+                {% else %}{% ifequal order '-jijik'%}
+                    <th><a href="/trainning/keyword/{{show}}/jijik.php">jijik &uarr;</a></th>
+                {% else %}
+                    <th><a href="/trainning/keyword/{{show}}/-jijik.php">jijik</a></th>
+                {% endifequal %}{% endifequal %}
+                
+                {% ifequal order 'malu'%}
+                    <th><a href="/trainning/keyword/{{show}}/-malu.php">malu &darr;</a></th>
+                {% else %}{% ifequal order '-malu'%}
+                    <th><a href="/trainning/keyword/{{show}}/malu.php">malu &uarr;</a></th>
+                {% else %}
+                    <th><a href="/trainning/keyword/{{show}}/-malu.php">malu</a></th>
+                {% endifequal %}{% endifequal %}
+                
+                {% ifequal order 'bersalah'%}
+                    <th><a href="/trainning/keyword/{{show}}/-bersalah.php">bersalah &darr;</a></th>
+                {% else %}{% ifequal order '-bersalah'%}
+                    <th><a href="/trainning/keyword/{{show}}/bersalah.php">bersalah &uarr;</a></th>
+                {% else %}
+                    <th><a href="/trainning/keyword/{{show}}/-bersalah.php">bersalah</a></th>
+                {% endifequal %}{% endifequal %}
+                
+                <th>action</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for keyword in keywords %}
+            <tr>
+                <td>{{keyword.key.id}}</td>
+                <td>{{keyword.word}}</td>
+                <td>{{keyword.senang}}</td>
+                <td>{{keyword.sedih}}</td>
+                <td>{{keyword.takut}}</td>
+                <td>{{keyword.marah}}</td>
+                <td>{{keyword.jijik}}</td>
+                <td>{{keyword.malu}}</td>
+                <td>{{keyword.bersalah}}</td>
+                <td>
+                    {% if keyword.valid %}
+                        <a href="/trainning/keyword-switch/invalid/{{keyword.key}}.php?uri={{uri}}">invalid</a>
+                    {% else %}
+                        <a href="/trainning/keyword-switch/valid/{{keyword.key}}.php?uri={{uri}}">valid</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+        <thead>
+            <tr>
+                <th colspan="10" style="text-align:right;border-top:5px solid #fff">
+                    {% if first %}
+                        <span style="color:#aaa">&lt;&lt;prev-{{count}}</span>
+                    {% else %}
+                        <a href="/trainning/keyword/{{show}}/{{order}}/{{count}}/{{prev_page}}.php">&lt;&lt;prev-{{count}}</a>
+                    {% endif %}
+                    | <b>{{current}}</b> |
+                    
+                    {% if last %}
+                        <span style="color:#aaa">next-{{count}}&gt;&gt;</span>
+                    {% else %}
+                        <a href="/trainning/keyword/{{show}}/{{order}}/{{count}}/{{next_page}}.php">next-{{count}}&gt;&gt;</a>
+                    {% endif %}
+                </th>
+            </tr>
+        </thead>
+    </table>
+{% endblock%}
+

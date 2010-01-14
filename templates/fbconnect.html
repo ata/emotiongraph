@@ -1,4 +1,14 @@
 {% extends 'base.html' %}
+{% block addscript %}
+
+<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+<script type="text/javascript">
+    document.observe("dom:loaded", function() {
+        FB.init("ead88d005b9905d8e6d13282e0065b93", "/xd_receiver.htm");
+        $$('table tbody > tr:nth-child(even)').each(function(e){e.addClassName('even')})
+    });
+</script>
+{% endblock %}
 
 {% block content %}
 <script type="text/javascript">FB.init("{{ api_key }}", "/xd_receiver.html");</script>

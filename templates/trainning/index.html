@@ -1,12 +1,32 @@
 {% extends '../base.html' %}
 
-
+{% block addscript %}
+<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+<script type="text/javascript">
+    document.observe("dom:loaded", function() {
+        FB.init("ead88d005b9905d8e6d13282e0065b93", "/xd_receiver.htm");
+        $$('table tbody > tr:nth-child(even)').each(function(e){e.addClassName('even')})
+    });
+</script>
+{% endblock %}
 
 {% block content %}
 
-<h3 class="alt">Grafik Hasil Trainning</h3>
-<img src="{{chart}}"/>
 
+<h3 class="alt">Graph result Trainning without Uncategory</h3>
+<img src="{{chart}}"/>
+<br/>
+<br/>
+<br/>
+<br/>
+<hr/>
+<h3 class="alt">Graph result Trainning with Uncategory</h3>
+<img src="{{chart_all}}"/>
+<br/>
+<br/>
+<br/>
+<br/>
+<hr/>
 <div class="box">
     <h3 class="alt">Static Trainning</h3>
     Total Trainning: {{static.total}} <br/>
@@ -26,11 +46,11 @@
 {% block sidebar %}
     <h3 class="caps">Friends</h3>
     <ul id="friends">
-    {% for uid in friends %}
-        <li id="friend_{{uid}}">
-            <a href="/trainning/{{uid}}.php">
-                <fb:profile-pic uid="{{uid}}" height="20px" linked="false" size="square"></fb:profile-pic>
-                <fb:name uid="{{uid}}" capitalize="true" linked="false"></fb:name>
+    {% for friend in friends %}
+        <li id="friend_{{friend.uid}}">
+            <a href="/trainning/status/{{friend.key}}.php">
+                <fb:profile-pic uid="{{friend.uid}}" height="20px" linked="false" size="square"></fb:profile-pic>
+                <fb:name uid="{{friend.uid}}" capitalize="true" linked="false"></fb:name>
             </a>
         </li>
     {% endfor %}

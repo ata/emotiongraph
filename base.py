@@ -1,40 +1,12 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from google.appengine.api import users
 from models import *
 
 import facebook
 import config
 import os
 import yaml
-
-
-class FacebookConnect(object):
-    
-    def __init__(self,func):
-        self.func = func
-        
-    def __call__(self, *args, **kwargs):
-        config = yaml.load(file('facebook.yaml', 'r'))
-        self.api_key = config['api_key']
-        self.secret_key = config['secret_key']
-        self.facebook = facebook.Facebook(self.api_key, self.secret_key)
-        
-        if not self.facebook.check_session(self.request):
-            self.render('fbconnect.html',{'uri':self.request.uri, 
-                                        'api_key': self.api_key})
-            return
-        try:
-            self.user = self.facebook.users.getInfo(
-                        [self.facebook.uid],
-                        ['uid', 'name', 'birthday', 'relationship_status'])[0]
-                
-        except facebook.FacebookError:
-          self.render('fbconnect.html',{'uri':self.request.uri, 
-                                        'api_key': self.api_key})
-          return
-          
-        self.func(self, *args, **kwargs)
-
 
 class BaseRequestHandler(webapp.RequestHandler):
     
@@ -45,6 +17,15 @@ class BaseRequestHandler(webapp.RequestHandler):
                 template_name)
                 
     def render(self,template_name,template_vars={}):
+        user = users.get_current_user()
+        if user == None:
+            template_vars.update({'login_url': users.create_login_url(self.request.uri),
+                                    'login_label':'login'})
+        else:
+            template_vars.update({'login_url': users.create_logout_url(self.request.uri),
+                                    'login_label':'logout',
+                                    'nickname':user.nickname()})
+        
         template_path = self.get_template(template_name)
         self.response.out.write(template.render(template_path, template_vars))
 
@@ -57,6 +38,9 @@ class FacebookConnectHandler(BaseRequestHandler):
         self.api_key = config['api_key']
         self.secret_key = config['secret_key']
         self.facebook = facebook.Facebook(self.api_key, self.secret_key)
+        if User.all().filter('login = ', users.get_current_user()).get() == None:
+            User().put()
+        self.user = User.all().filter('login = ', users.get_current_user()).get()
         
     def connected(self, *args, **kwargs):
         raise NotImplementedError()
@@ -66,19 +50,17 @@ class FacebookConnectHandler(BaseRequestHandler):
             self.render('fbconnect.html',{'uri':self.request.uri, 
                                         'api_key': self.api_key})
             return
-        try:
-            query = User.all().filter('uid = ', self.facebook.uid)
-            
-            if query.count() == 0:
+        try:            
+            if self.user.uid is None:
+                
                 fbuser = self.facebook.users.getInfo(
                                 [self.facebook.uid],
-                                ['uid', 'name'])[0]
-                self.user = User(uid = fbuser['uid'], name = fbuser['name'])
-                self.user.friends = self.facebook.friends.get()
-                self.user.tranning_queue = self.user.friends
-                self.user.save()
-            else:
-                self.user = query.fetch(10)[0]
+                                ['uid','name'])[0]
+                
+                self.user.uid = fbuser['uid']
+                self.user.name = fbuser['name']
+                friends = self.facebook.friends.get()
+                self.user.put()
                 
         except facebook.FacebookError:
           self.render('fbconnect.html',{'uri':self.request.uri, 

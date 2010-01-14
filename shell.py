@@ -200,10 +200,19 @@ class FrontPageHandler(webapp.RequestHandler):
     vars = { 'server_software': os.environ['SERVER_SOFTWARE'],
              'python_version': sys.version,
              'session': str(session_key),
-             'user': users.get_current_user(),
-             'login_url': users.create_login_url(session_url),
-             'logout_url': users.create_logout_url(session_url),
+             'user': users.get_current_user()
              }
+             
+    user = users.get_current_user()
+    if user == None:
+        vars.update({'login_url': users.create_login_url(self.request.uri),
+                                'login_label':'login'})
+    else:
+        vars.update({'login_url': users.create_logout_url(self.request.uri),
+                                'login_label':'logout',
+                                'nickname':user.nickname()})
+    
+    
     rendered = webapp.template.render(template_file, vars, debug=_DEBUG)
     self.response.out.write(rendered)
 

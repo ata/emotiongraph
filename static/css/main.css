@@ -40,3 +40,7 @@ ul#friends a:link,ul#friends a:visited{
 ul#friends img{
     height:20px;
 }
+table th a:link,table th a:visited{
+    text-decoration:none;
+}
+
