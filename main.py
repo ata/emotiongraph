@@ -25,6 +25,7 @@ class IndexFacebookHandler(FacebookCanvasHandler,base.BaseRequestHandler):
     
     def get(self):
         self.redirect('/graph/index.php')
+        
     def canvas(self):
         self.redirect('http://apps.facebook.com/emograph/canvas/index.php')
 
