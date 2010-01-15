@@ -1,0 +1,32 @@
+{% extends 'index.html' %}
+{% block content%}
+
+<h3 class="alt">
+    Trainning Status - 
+    <fb:name uid="{{uid}}" capitalize="true" linked="false"></fb:name>
+</h3>
+<img src="{{chart}}"/>
+
+<table id="table_status">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Emotion Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for status in states %}
+        <tr>
+            <td>
+                {{status.message}}
+            </td>
+            <td>
+                {{status.emotion}}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>        
+
+{% endblock%}
+

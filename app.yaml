@@ -36,7 +36,7 @@ handlers:
   
 - url: /trainning.*
   script: trainning.py
-  login: required
+  login: admin
 
 - url: /graph.*
   script: graph.py

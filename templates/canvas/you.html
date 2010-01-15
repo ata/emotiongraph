@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block tab %}
+<fb:tabs>  
+    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/index.php" title="Home" selected="true"/>  
+    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/friend.php" title="Friends"/>  
+    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/invite.php" title="Invite Friends"/>  
+</fb:tabs>
+{% endblock %}
+
+{% block content %}
+    <h3 class="alt">
+        Result Emotion Status for
+        <fb:name uid="{{uid}}" capitalize="true" useyou="false"></fb:name>
+    </h3>
+    <p align="center"><img src="{{chart}}"/></p>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Message</th>
+                <th>Emotion Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for status in states %}
+            <tr>
+                <td>
+                    {{status.message}}
+                </td>
+                <td>
+                    {{status.emotion}}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>  
+{% endblock %}

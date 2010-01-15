@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block tab %}
+<fb:tabs>  
+    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/index.php" title="Home" selected="true"/>  
+    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/friend.php" title="Friends"/>  
+    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/invite.php" title="Invite Friends"/>  
+</fb:tabs>
+{% endblock %}
+
+{% block content %}
+    <p>Hello, <fb:name uid="{{uid}}" useyou="false"/></p>
+    <p align="center">
+        <fb:editor action="http://apps.facebook.com/emograph/canvas/you.php"> 
+            <fb:editor-buttonset> 
+                <fb:editor-button value="process" name="process"/> 
+            </fb:editor-button>
+        </fb:editor-button>
+    </p>
+{% endblock %}

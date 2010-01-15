@@ -96,7 +96,7 @@ class KeywordHandler(base.BaseRequestHandler):
         offset = int(count) * (int(page) -1)
         keywords = query.fetch(int(count), offset)
         
-        current = "%d - %d" % (offset + 1, len(keywords))
+        current = "%d - %d" % (offset + 1, len(keywords) +offset)
         
         if(len(keywords)) < int(count):
             last = True 

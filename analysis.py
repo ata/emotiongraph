@@ -57,3 +57,40 @@ def get_trainning_chart_all():
     
     return base_url + data + label
     
+def get_states_with_emotion(states):
+    new_states = states[:]
+    for status in new_states:
+        status['emotion'] = Status.check_emotion(status['message'])
+    return new_states
+
+def get_chart(states_with_emotion,size='600x400'):
+    chart_data = states_with_emotion[:]
+    chart_data.reverse()
+    
+    emo_values =   {'marah':10,'bersalah':20, 'jijik':30, 'sedih':40,
+                    'takut':50, 'malu':60, 'senang':70}
+    
+    data = ''
+    label = ''
+    i = 0
+    for c in chart_data:
+        label += '%d|' % (i + 1)
+        data += '%d,' % (emo_values[c['emotion']])
+        i += 1
+    
+    label = label.strip('|')
+    data = data.strip(',')
+    
+    
+    chart = 'http://chart.apis.google.com/chart?'\
+            'cht=lc'\
+            '&chd=t:%s'\
+            '&chs=%s'\
+            '&chxt=x,y'\
+            '&chxl='\
+            '0:|%s|'\
+            '1:||marah|bersalah|jijik|sedih|takut|malu|senang|||'\
+            '&chg=10,10' % (data,size,label)
+    return chart
+
+
