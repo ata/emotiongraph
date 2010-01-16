@@ -12,6 +12,11 @@ indexes:
 
 - kind: Keyword
   properties:
+  - name: __key__
+    direction: desc
+
+- kind: Keyword
+  properties:
   - name: valid
   - name: bersalah
 

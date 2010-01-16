@@ -3,7 +3,7 @@
 
 <form method="post">
     <fieldset>
-        <legend>Smiley | Custume Keyword</legend>
+        <legend>Smiley | Custome Keyword</legend>
         <input name="smiley" type="text"/><br/>
         <input name="smiley" type="text"/><br/>
         <input name="smiley" type="text"/><br/>
@@ -28,9 +28,9 @@
         {% for smiley in smiles %}
         <tr>
             <td>{{smiley.key.id}}</td>
-            <td>{{smiley.plain}}</td>
+            <td>{{smiley.word}}</td>
             <td>
-                <a href="/trainning/smiley/delete/{{smiley.key}}.php">delete</a>
+                <a href="/trainning/smiley/delete/{{smiley.key.id}}.php">delete</a>
             </td>
         </tr>
         {% endfor %}

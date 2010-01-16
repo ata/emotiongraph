@@ -11,18 +11,40 @@
 
 {% block content %}
 
-<h3 class="alt">Hanya untuk mengecek</h3>
+<h3 class="alt">
+    Emotion Graph - <fb:name uid="{{user.uid}}" capitalize="true" useyou="false" linked="false"></fb:name>
+</h3>
+<img src="{{chart}}"/>
 
+<table id="table_status">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Emotion Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for status in states %}
+        <tr>
+            <td>
+                {{status.message}}
+            </td>
+            <td>
+                {{status.emotion}}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>    
 {% endblock %}
 
 {% block sidebar %}
-    <h3 class="caps">Friends</h3>
     <ul id="friends">
     {% for friend in friends %}
         <li id="friend_{{friend.uid}}">
-            <a href="/graph/emotion/{{friend.key}}.php">
-                <fb:profile-pic uid="{{friend.uid}}" height="20px" linked="false" size="square"></fb:profile-pic>
-                <fb:name uid="{{friend.uid}}" capitalize="true" linked="false"></fb:name>
+            <a href="/graph/emotion/{{friend.uid}}.php">
+                <img src="{{friend.pic_square}}"/>
+                {{friend.name}}
             </a>
         </li>
     {% endfor %}

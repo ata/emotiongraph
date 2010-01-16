@@ -19,7 +19,7 @@ class IndexHandler(base.FacebookConnectHandler):
                         uid = uid, 
                         trainning = True).save()
         
-        self.render('trainning/index.html',{'friends':Friend.get_trainnings(self.user),
+        self.render('trainning/index.html',{'friends':Friend.get_trainnings(self.user,30),
                                             'static': get_trainning_static(),
                                             'chart_all':get_trainning_chart_all(),
                                             'chart':get_trainning_chart()})
@@ -27,8 +27,10 @@ class IndexHandler(base.FacebookConnectHandler):
 
 class StatusHandler(base.FacebookConnectHandler):
     
-    def connected(self,key):
-        uid = db.get(key).uid
+    def connected(self,id):
+        uid = Friend.get_by_id(int(id)).uid
+        #uid = user.uid
+        
         query = Status.all().filter('uid = ', uid)
         
         if query.count() == 0:
@@ -48,7 +50,7 @@ class StatusHandler(base.FacebookConnectHandler):
             states = query.fetch(10)
         
         else:
-            friend = db.get(key)
+            friend = db.get_by_id(id)
             friend.trainning = False
             friend.put()
             
@@ -58,9 +60,9 @@ class StatusHandler(base.FacebookConnectHandler):
         self.render('trainning/status.html',{'states':states,
                                             'uid':uid,
                                             'static': get_trainning_static(),
-                                            'friends':Friend.get_trainnings(self.user)})
+                                            'friends':Friend.get_trainnings(self.user,30)})
         
-    def post(self,key):
+    def post(self,id):
         #status = Status.get(self.request.get('key'))
         keys = self.request.get_all('key')
         categories = self.request.get_all('category')
@@ -71,6 +73,7 @@ class StatusHandler(base.FacebookConnectHandler):
             status.put()
             if categories[i] != 'uncategory':
                 Keyword.update(status)
+                Keyword.update_custome(status)
         self.redirect(self.request.uri)
             
 
@@ -112,52 +115,62 @@ class KeywordHandler(base.BaseRequestHandler):
 
 class SwitchKeyword(base.BaseRequestHandler):
     
-    def get(self, valid, key):
-        keyword = Keyword.get(key)
-        uri = self.request.get('uri')
+    def get(self, id = None):
+        keyword = Keyword.get_by_id(int(id))
         
-        if valid == 'invalid':
+        if keyword.valid:
             keyword.valid = False
         else:
             keyword.valid = True
         keyword.put()
         
-        self.redirect(uri)
-
+        self.redirect(self.request.get('uri'))
+    
+    def post(self, id = None):
+        ids = self.request.get_all('id')
+        for id in ids:
+            keyword = Keyword.get_by_id(int(id))
+            if keyword.valid:
+                keyword.valid = False
+            else:
+                keyword.valid = True
+            keyword.put()
+        
+        self.redirect(self.request.get('uri'))
 
 class SmileyHandler(base.BaseRequestHandler):
     
     def get(self):
-        smiles = CustumeKeyword.all().fetch(1000)
+        smiles = Keyword.all().filter('custome = ',True).fetch(1000)
         self.render('trainning/smiley.html',{'smiles':smiles})
         
     def post(self):
         smiles = self.request.get_all('smiley')
         for smiley in smiles:
             if len(smiley.strip()) != 0:
-                CustumeKeyword.add(smiley)
+                Keyword(word = smiley).save_custome()
                 
-        
         self.redirect('/trainning/smiley.php')
         
 class SmileyDeleteHandler(base.BaseRequestHandler):
-    def get(self,key):
-        db.delete(key)
+    def get(self,id):
+        Keyword.get_by_id(int(id)).delete()
         self.redirect('/trainning/smiley.php')
         
 
 def main():
     application = webapp.WSGIApplication([
         (r'/trainning/index.php',IndexHandler),
-        (r'/trainning/keyword/(?P<show>\w+)/(?P<order>\S+)/(?P<count>\d+)/(?P<page>\d+).php',KeywordHandler),
-        (r'/trainning/keyword/(?P<show>\w+)/(?P<order>\S+)/(?P<count>\d+).php',KeywordHandler),
-        (r'/trainning/keyword/(?P<show>\w+)/(?P<order>\S+).php',KeywordHandler),
-        (r'/trainning/keyword/(?P<show>\w+).php',KeywordHandler),
+        (r'/trainning/keyword/show-(?P<show>\w+)/order-(?P<order>\S+)/count-(?P<count>\d+)/page-(?P<page>\d+).php',KeywordHandler),
+        (r'/trainning/keyword/show-(?P<show>\w+)/order-(?P<order>\S+)/count-(?P<count>\d+).php',KeywordHandler),
+        (r'/trainning/keyword/show-(?P<show>\w+)/order-(?P<order>\S+).php',KeywordHandler),
+        (r'/trainning/keyword/show-(?P<show>\w+).php',KeywordHandler),
         (r'/trainning/keyword.php',KeywordHandler),
-        (r'/trainning/keyword-switch/(?P<valid>\w+)/(?P<key>\w+).php',SwitchKeyword),
+        (r'/trainning/keyword-switch/(?P<id>\d+).php',SwitchKeyword),
+        (r'/trainning/keyword-switch.php',SwitchKeyword),
         (r'/trainning/smiley.php',SmileyHandler),
-        (r'/trainning/smiley/delete/(?P<key>\w+).php',SmileyDeleteHandler),
-        (r'/trainning/status/(?P<key>\w+).php',StatusHandler),
+        (r'/trainning/smiley/delete/(?P<id>\d+).php',SmileyDeleteHandler),
+        (r'/trainning/status/(?P<id>\d+).php',StatusHandler),
         ],debug=True)
         
     util.run_wsgi_app(application)

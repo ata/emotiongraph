@@ -55,16 +55,18 @@ class FacebookConnectHandler(BaseRequestHandler):
                 
                 fbuser = self.facebook.users.getInfo(
                                 [self.facebook.uid],
-                                ['uid','name'])[0]
+                                ['uid','name','pic','pic_square'])[0]
                 
                 self.user.uid = fbuser['uid']
                 self.user.name = fbuser['name']
-                friends = self.facebook.friends.get()
+                self.user.pic = fbuser['pic']
+                self.user.pic_square = fbuser['pic_square']
                 self.user.put()
                 
         except facebook.FacebookError:
-          self.render('fbconnect.html',{'uri':self.request.uri, 
+            self.render('fbconnect.html',{'uri':self.request.uri, 
                                         'api_key': self.api_key})
-          return
+            return
+            
         self.connected(*args, **kwargs)
         

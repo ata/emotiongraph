@@ -3,38 +3,38 @@
 {% block tab %}
 <fb:tabs>  
     <fb:tab-item href="http://apps.facebook.com/emograph/canvas/index.php" title="Home" selected="true"/>  
-    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/friend.php" title="Friends"/>  
     <fb:tab-item href="http://apps.facebook.com/emograph/canvas/invite.php" title="Invite Friends"/>  
 </fb:tabs>
 {% endblock %}
 
 {% block content %}
-    <h3 class="alt">
-        Result Emotion Status for
-        <fb:name uid="{{uid}}" capitalize="true" useyou="false"></fb:name>
-    </h3>
-    <p align="center"><img src="{{chart}}"/></p>
-
-   
-    <table>
-        <thead>
-            <tr>
-                <th>Message</th>
-                <th>Emotion Result</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for status in states %}
-            <tr>
-                <td>
-                    {{status.message}}
-                </td>
-                <td>
-                    {{status.emotion}}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table> 
-
+    <fb:mediaheader uid="{{uid}}">
+        <fb:header-title>
+            <fb:name uid="{{uid}}" useyou="false" linked="false"/> Emotion Status Result
+        </fb:header-title>
+    </fb:mediaheader>
+    <img src="{{chart}}"/>
+    <br/><br/>
+    <div id="table_container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="name_heading">Message</th>
+                    <th class="name_heading" width="120px">Emotion Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for status in states %}
+                <tr>
+                    <td>
+                        {{status.message}}
+                    </td>
+                    <td>
+                        {{status.emotion}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+    </div>
 {% endblock %}

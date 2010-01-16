@@ -78,32 +78,6 @@ class InviteSuccessCanvasHandler(FacebookCanvasHandler,base.BaseRequestHandler):
 
 
 
-class CronProbsHandler(base.BaseRequestHandler):
-    def get(self):
-        
-        last_emotion_index = memcache.get('last_cron_emotion_index')
-        
-        if last_emotion_index is None:
-            memcache.set('last_cron_emotion_index', 0, 3600 * 24)
-            last_emotion_index = 0
-        
-        emotion = ['senang','sedih','marah','malu',
-                 'jijik','takut','bersalah']
-        
-        if Keyword.generate_probs_cache(emotion[last_emotion_index]):
-            self.response.out.write("Ok => %s" % (emotion[last_emotion_index]))
-            last_emotion_index += 1
-            if last_emotion_index == 7:
-                last_emotion_index = 0
-            memcache.set('last_cron_emotion_index', last_emotion_index, 3600 * 24)
-        #for e in emotion:
-            
-
-
-class CronWordsHandler(base.BaseRequestHandler):
-    def get(self):
-        Keyword.generate_list_cache()
-        self.response.out.write("Ok")
 
 
 def main():
@@ -114,9 +88,7 @@ def main():
         (r'/canvas/friend.php',FriendCanvasHandler),
         (r'/canvas/invite.php',InviteCanvasHandler),
         (r'/canvas/invite-success.php',InviteSuccessCanvasHandler),
-        (r'/index.php',IndexHandler),
-        (r'/cron-probs.php',CronProbsHandler),
-        (r'/cron-words.php',CronWordsHandler)
+        (r'/index.php',IndexHandler)
         ],debug=True)
         
     util.run_wsgi_app(application)

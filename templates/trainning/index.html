@@ -48,7 +48,7 @@
     <ul id="friends">
     {% for friend in friends %}
         <li id="friend_{{friend.uid}}">
-            <a href="/trainning/status/{{friend.key}}.php">
+            <a href="/trainning/status/{{friend.key.id}}.php">
                 <fb:profile-pic uid="{{friend.uid}}" height="20px" linked="false" size="square"></fb:profile-pic>
                 <fb:name uid="{{friend.uid}}" capitalize="true" linked="false"></fb:name>
             </a>

@@ -1,6 +1,8 @@
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp import util
+from google.appengine.api import urlfetch
+from google.appengine.api import memcache
 from models import *
 from analysis import *
 
@@ -9,33 +11,41 @@ import base
 class IndexHander(base.FacebookConnectHandler):
     
     def connected(self):
-        if not Friend.get_trainnings(self.user):
-            friends = self.facebook.friends.get()
-            for uid in friends:
-                Friend( user = self.user, 
-                        uid = uid, 
-                        trainning = True).save()
-        
-        friends = Friend.all().filter('user = ', self.user).fetch(20)
-        self.render('graph/index.html',{'friends':friends})
-    
+        try:
+            
+            friends = get_fbfriends_cache(self.facebook,40)
+            states = get_fbstates_cache(self.facebook,int(self.facebook.uid))
+            chart = get_chart(states)
+            
+            self.render('graph/index.html',{'states':states,
+                                                'friends':friends,
+                                                'user':self.user,
+                                                'chart':chart})
+            
+        except urlfetch.DownloadError:
+            self.render('error/download.html',{'uri': self.request.uri})
 
 class CheckEmotionHandler(base.FacebookConnectHandler):
-    def connected(self,key):
-        uid = db.get(key).uid
-        friends = Friend.all().filter('user = ', self.user).fetch(20)
-        states = get_states_with_emotion(self.facebook.status.get(uid,20))
-        chart = get_chart(states)
-        
-        self.render('graph/emotion.html',{'states':states,
-                                            'uid':uid,
-                                            'friends':friends,
-                                            'chart':chart})
+    def connected(self,uid):
+        uid = int(uid)
+        try:
+            
+            friends = get_fbfriends_cache(self.facebook,40)
+            states = get_fbstates_cache(self.facebook,uid)
+            chart = get_chart(states)
+            
+            self.render('graph/emotion.html',{'states':states,
+                                                'friends':friends,
+                                                'user':self.user,
+                                                'uid':uid,
+                                                'chart':chart})
+        except urlfetch.DownloadError:
+            self.render('error/download.html',{'uri': self.request.uri})
 
 def main():
     application = webapp.WSGIApplication([
         (r'/graph/index.php',IndexHander),
-        (r'/graph/emotion/(?P<key>\w+).php',CheckEmotionHandler),
+        (r'/graph/emotion/(?P<uid>\d+).php',CheckEmotionHandler),
         ],debug=True)
         
     util.run_wsgi_app(application)
