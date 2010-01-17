@@ -122,7 +122,44 @@ def trainning_smiley():
             memcache.set('count_trainning_smiley',count)
     
     print 'Count Last : %d' % count
+
+def get_keyword_stats():
     
+    stats = memcache.get('keyword_stats')
+    if stats is not None:
+        return stats
+    else:
+        senang  = {'count':Keyword.count_all_category('senang'),
+                    'sum': Keyword.get_word_sum_in_category('senang')}
+        sedih   = {'count':Keyword.count_all_category('sedih'),
+                    'sum': Keyword.get_word_sum_in_category('sedih')}
+        marah   = {'count':Keyword.count_all_category('marah'),
+                    'sum': Keyword.get_word_sum_in_category('marah')}
+        takut   = {'count':Keyword.count_all_category('takut'),
+                    'sum': Keyword.get_word_sum_in_category('takut')}
+        malu    = {'count':Keyword.count_all_category('malu'),
+                    'sum': Keyword.get_word_sum_in_category('malu')}
+        jijik  = {'count':Keyword.count_all_category('senang'),
+                    'sum': Keyword.get_word_sum_in_category('senang')}
+        bersalah  = {'count':Keyword.count_all_category('senang'),
+                    'sum': Keyword.get_word_sum_in_category('senang')}
+        total  = {'count':Keyword.count_all(),
+                    'sum': senang['sum'] + sedih['sum'] + marah['sum'] + \
+                            takut['sum'] + jijik['sum'] + malu['sum'] + \
+                            bersalah['sum']}
+                            
+        stats = {   'total':total,
+                    'sedih':sedih,
+                    'senang':senang,
+                    'marah':marah,
+                    'takut':takut,
+                    'malu':malu,
+                    'jijik':jijik,
+                    'bersalah':bersalah}
+        memcache.set('keyword_stats',stats,3600)
+        return stats
+
+
 def clean_smiley():
     memcache.delete('last_key_trainning_smiley')
     memcache.delete('count_trainning_smiley')

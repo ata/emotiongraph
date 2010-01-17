@@ -163,3 +163,19 @@
     </table>
 {% endblock%}
 
+{% block sidebar %}
+    <div class="box">
+        <h3 class="alt">Keyword Stats</h3>
+        Total : {{stats.total.count}} / {{stats.total.sum}} <br/>
+        Senang : {{stats.senang.count}} / {{stats.senang.sum}}<br/>
+        Sedih : {{stats.sedih.count}} / {{stats.sedih.sum}}<br/>
+        Marah : {{stats.marah.count}} / {{stats.marah.sum}}<br/>
+        Malu : {{stats.malu.count}} / {{stats.malu.sum}}<br/>
+        Jijik : {{stats.jijik.count}} / {{stats.jijik.sum}}<br/>
+        takut : {{stats.takut.count}} / {{stats.takut.sum}}<br/>
+        bersalah : {{stats.bersalah.count}} / {{stats.bersalah.sum}}<br/>
+        
+    </div>
+    
+{% endblock %}
+

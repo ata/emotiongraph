@@ -108,6 +108,7 @@ class KeywordHandler(base.BaseRequestHandler):
                                                 'next_page':int(page) + 1,
                                                 'last':last,
                                                 'first':first,
+                                                'stats': get_keyword_stats(),
                                                 'prev_page':int(page) - 1,
                                                 'uri':self.request.uri})
 
