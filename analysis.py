@@ -139,10 +139,10 @@ def get_keyword_stats():
                     'sum': Keyword.get_word_sum_in_category('takut')}
         malu    = {'count':Keyword.count_all_category('malu'),
                     'sum': Keyword.get_word_sum_in_category('malu')}
-        jijik  = {'count':Keyword.count_all_category('senang'),
-                    'sum': Keyword.get_word_sum_in_category('senang')}
-        bersalah  = {'count':Keyword.count_all_category('senang'),
-                    'sum': Keyword.get_word_sum_in_category('senang')}
+        jijik  = {'count':Keyword.count_all_category('jijik'),
+                    'sum': Keyword.get_word_sum_in_category('jijik')}
+        bersalah  = {'count':Keyword.count_all_category('bersalah'),
+                    'sum': Keyword.get_word_sum_in_category('bersalah')}
         total  = {'count':Keyword.count_all(),
                     'sum': senang['sum'] + sedih['sum'] + marah['sum'] + \
                             takut['sum'] + jijik['sum'] + malu['sum'] + \

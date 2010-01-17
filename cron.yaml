@@ -1,7 +1,7 @@
 cron:
-#- description: list word
-#  url: /cron-words.php
-#  schedule: every 5 minutes
-#- description: probabilitas
-#  url: /cron-probs.php
-#  schedule: every 5 minutes
+- description: list word
+  url: /cron-words.php
+  schedule: every 5 minutes
+- description: probabilitas
+  url: /cron-probs.php
+  schedule: every 5 minutes

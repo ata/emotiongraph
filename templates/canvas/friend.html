@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
-{% block tab %}
-<fb:tabs>  
-    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/index.php" title="Home"/>  
-    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/friend.php" title='Friends' selected="true"/>  
-    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/invite.php" title="Invite Friends"/>  
-</fb:tabs>
-{% endblock %}
 
 {% block content %}
-    Friend
+<p align="center">
+    <form action="friend-graph.php" method="post">
+    <fb:friend-selector uid="{{uid}}" name="uid" idname="friend_sel" />
+    <input type="submit" value="Get Graph"/>
+    </form>
+</p>
 {% endblock %}

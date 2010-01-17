@@ -6,13 +6,8 @@
     #app219707131588_table_container table .even_colomn { background:#F8F8F8 none repeat scroll 0 0; } 
     #app219707131588_table_container td.action_text { width:230px; } </style> 
 <fb:header>Emo Graph</fb:header>
-{% block tab %}
-<fb:tabs>  
-    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/index.php" title="Home" selected="true"/>
-    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/friend.php" title="Home" selected="true"/>
-    <fb:tab-item href="http://apps.facebook.com/emograph/canvas/invite.php" title="Invite Friends" />  
-</fb:tabs>
-{% endblock %}
+
+{{menu}}
 
 {% block content %}
    You
