@@ -17,6 +17,8 @@ class User(db.Model):
 class Friend(db.Model):
     user = db.ReferenceProperty(reference_class = User, collection_name = 'friends')
     uid = uid = db.IntegerProperty(required=True)
+    name = db.StringProperty()
+    pic_square = db.StringProperty()
     trainning = db.BooleanProperty()
     
     def save(self):

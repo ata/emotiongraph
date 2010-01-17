@@ -4,11 +4,11 @@
 <form method="post">
     <fieldset>
         <legend>Smiley | Custome Keyword</legend>
-        <input name="smiley" type="text"/><br/>
-        <input name="smiley" type="text"/><br/>
-        <input name="smiley" type="text"/><br/>
-        <input name="smiley" type="text"/><br/>
-        <input name="smiley" type="text"/><br/>
+        <input name="smiley" type="text"/> <input name="smiley" type="text"/><br/>
+        <input name="smiley" type="text"/> <input name="smiley" type="text"/><br/>
+        <input name="smiley" type="text"/> <input name="smiley" type="text"/><br/>
+        <input name="smiley" type="text"/> <input name="smiley" type="text"/><br/>
+        <input name="smiley" type="text"/> <input name="smiley" type="text"/><br/>
     </fieldset>
     <div class="span-3 prepend-13 last"><input type="submit" value="Add Smiley"/></div>
 </form>
@@ -20,7 +20,14 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>smiley / custume keyword</th>
+            <th>smiley</th>
+            <th>senang</th>
+            <th>sedih</th>
+            <th>takut</th>
+            <th>marah</th>
+            <th>jijik</th>
+            <th>malu</th>
+            <th>bersalah</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -29,6 +36,13 @@
         <tr>
             <td>{{smiley.key.id}}</td>
             <td>{{smiley.word}}</td>
+            <td>{{smiley.senang}}</td>
+            <td>{{smiley.sedih}}</td>
+            <td>{{smiley.takut}}</td>
+            <td>{{smiley.marah}}</td>
+            <td>{{smiley.jijik}}</td>
+            <td>{{smiley.malu}}</td>
+            <td>{{smiley.bersalah}}</td>
             <td>
                 <a href="/trainning/smiley/delete/{{smiley.key.id}}.php">delete</a>
             </td>

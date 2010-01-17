@@ -29,7 +29,7 @@
 <div class="container" id="container">
     <div class="span-16" id="header">
     {% block header %}
-        <h1 class="alt">Emo Graph</h1>
+        <a href="/"><h1 class="alt">Emo Graph</h1></a>
     {% endblock %}
     </div>
     <div class="span-8 last" style="text-align:right">
@@ -40,7 +40,7 @@
         {% endifequal %}
         <a href="{{login_url}}"><b>{{login_label}}</b></a>
     </div>
-    
+    {% if admin %}
     <div class="span-24 last" id="menu">
         <ul>
             <li><a href="/graph/index.php">Graph</a></li>
@@ -50,6 +50,7 @@
             <li><a href="/shell.php">Shell</a></li>
         </ul>
     </div>
+    {% endif %}
     <hr/>
     
     <div class="span-16 colborder" id="content">

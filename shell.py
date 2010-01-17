@@ -206,10 +206,12 @@ class FrontPageHandler(webapp.RequestHandler):
     user = users.get_current_user()
     if user == None:
         vars.update({'login_url': users.create_login_url(self.request.uri),
+                                'admin': users.is_current_user_admin(),
                                 'login_label':'login'})
     else:
         vars.update({'login_url': users.create_logout_url(self.request.uri),
                                 'login_label':'logout',
+                                'admin': users.is_current_user_admin(),
                                 'nickname':user.nickname()})
     
     

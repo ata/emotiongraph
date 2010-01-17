@@ -20,11 +20,13 @@ class BaseRequestHandler(webapp.RequestHandler):
         user = users.get_current_user()
         if user == None:
             template_vars.update({'login_url': users.create_login_url(self.request.uri),
-                                    'login_label':'login'})
+                                    'login_label':'login',
+                                    'admin': users.is_current_user_admin()})
         else:
             template_vars.update({'login_url': users.create_logout_url(self.request.uri),
                                     'login_label':'logout',
-                                    'nickname':user.nickname()})
+                                    'nickname':user.nickname(),
+                                    'admin':users.is_current_user_admin()})
         
         template_path = self.get_template(template_name)
         self.response.out.write(template.render(template_path, template_vars))

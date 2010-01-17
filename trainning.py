@@ -1,6 +1,7 @@
 from google.appengine.ext import webapp
 from google.appengine.ext import db
 from google.appengine.ext.webapp import util
+from google.appengine.api import urlfetch
 from django.utils import simplejson
 from models import *
 from analysis import *
@@ -12,55 +13,51 @@ import base
 
 class IndexHandler(base.FacebookConnectHandler):
     def connected(self):
-        if not Friend.get_trainnings(self.user):
-            friends = self.facebook.friends.get()
-            for uid in friends:
-                Friend( user = self.user, 
-                        uid = uid, 
-                        trainning = True).save()
+        try:
+            friends = get_fbfriends_cache(self.facebook,1000)
+            
+            self.render('trainning/index.html',{'friends':friends,
+                                                'static': get_trainning_static(),
+                                                'user':self.user,
+                                                'uid':self.user.uid,
+                                                'chart_all':get_trainning_chart_all(),
+                                                'chart':get_trainning_chart()})
         
-        self.render('trainning/index.html',{'friends':Friend.get_trainnings(self.user,30),
-                                            'static': get_trainning_static(),
-                                            'chart_all':get_trainning_chart_all(),
-                                            'chart':get_trainning_chart()})
-
-
+        except urlfetch.DownloadError:
+            self.render('error/download.html',{'uri': self.request.uri})
+            
 class StatusHandler(base.FacebookConnectHandler):
     
-    def connected(self,id):
-        uid = Friend.get_by_id(int(id)).uid
-        #uid = user.uid
-        
-        query = Status.all().filter('uid = ', uid)
-        
-        if query.count() == 0:
-            states = self.facebook.status.get(uid)
-            for s in states:
-                Status( status_id = s['status_id'],
-                        message = s['message'],
-                        time = datetime.fromtimestamp(s['time']),
-                        uid = s['uid'],
-                        ).save()
-        
-        query = Status.all()
-        query.filter('category = ', None)
-        query.filter('uid = ', uid)
-        
-        if query.count() > 0:
-            states = query.fetch(10)
-        
-        else:
-            friend = db.get_by_id(id)
-            friend.trainning = False
-            friend.put()
+    def connected(self,uid):
+        try:
+            uid = int(uid)
             
-            self.redirect('/trainning/index.php')
-            return
-                                                
-        self.render('trainning/status.html',{'states':states,
-                                            'uid':uid,
-                                            'static': get_trainning_static(),
-                                            'friends':Friend.get_trainnings(self.user,30)})
+            selected = ""
+            
+            if self.user.uid == uid:
+                selected = 'selected="selected"'
+            
+            friends = get_fbfriends_cache(self.facebook,1000)
+            query = Status.all()
+            query.filter('category = ', None)
+            query.filter('uid = ', uid)
+            if query.count() == 0:
+                states = self.facebook.status.get(uid)
+                for s in states:
+                    Status( status_id = s['status_id'],
+                            message = s['message'],
+                            time = datetime.fromtimestamp(s['time']),
+                            uid = s['uid'],
+                            ).save()
+            states = query.fetch(10)
+            self.render('trainning/status.html',{'states':states,
+                                                'uid':uid,
+                                                'user':self.user,
+                                                'selected':selected,
+                                                'static': get_trainning_static(),
+                                                'friends':friends})
+        except urlfetch.DownloadError:
+            self.render('error/download.html',{'uri': self.request.uri})
         
     def post(self,id):
         #status = Status.get(self.request.get('key'))
@@ -77,9 +74,10 @@ class StatusHandler(base.FacebookConnectHandler):
         self.redirect(self.request.uri)
             
 
-class AjaxStatusHandler(base.BaseRequestHandler):
-    def get(self):
-        pass
+class FriendHandler(base.BaseRequestHandler):
+    def post(self):
+        uid = self.request.get('uid')
+        self.redirect('/trainning/status/%s.php' % uid)
 
 class KeywordHandler(base.BaseRequestHandler):
     
@@ -171,6 +169,7 @@ def main():
         (r'/trainning/smiley.php',SmileyHandler),
         (r'/trainning/smiley/delete/(?P<id>\d+).php',SmileyDeleteHandler),
         (r'/trainning/status/(?P<id>\d+).php',StatusHandler),
+        (r'/trainning/friend.php',FriendHandler)
         ],debug=True)
         
     util.run_wsgi_app(application)

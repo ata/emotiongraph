@@ -27,6 +27,7 @@
 <br/>
 <br/>
 <hr/>
+
 <div class="box">
     <h3 class="alt">Static Trainning</h3>
     Total Trainning: {{static.total}} <br/>
@@ -44,15 +45,22 @@
 {% endblock %}
 
 {% block sidebar %}
-    <h3 class="caps">Friends</h3>
-    <ul id="friends">
-    {% for friend in friends %}
-        <li id="friend_{{friend.uid}}">
-            <a href="/trainning/status/{{friend.key.id}}.php">
-                <fb:profile-pic uid="{{friend.uid}}" height="20px" linked="false" size="square"></fb:profile-pic>
-                <fb:name uid="{{friend.uid}}" capitalize="true" linked="false"></fb:name>
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
+    
+    <label>Select Your Friend</label>
+    <form action="/trainning/friend.php" method="post">
+        <select name="uid">
+            <option value="{{user.uid}}" {%ifequal user.uid uid%} selected="selected" {%endifequal%}>
+                {{user.name}}
+            </option>
+            {% for friend in friends %}
+                {% ifnotequal friend.uid 1583575245 %}
+                    <option value="{{friend.uid}}" {%ifequal friend.uid uid%} selected="selected" {%endifequal%}>
+                        {{friend.name}}
+                    </option>
+                {% endifnotequal %}
+            {% endfor %}
+        </select>
+        <input type="submit" value="Go!"/>
+    </form>
+    
 {% endblock %}

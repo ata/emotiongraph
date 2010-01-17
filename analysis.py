@@ -1,5 +1,6 @@
 from models import *
 from datetime import datetime
+from google.appengine.api import users
 
 import re
 
@@ -122,7 +123,14 @@ def trainning_smiley():
     
     print 'Count Last : %d' % count
     
-
+def clean_smiley():
+    memcache.delete('last_key_trainning_smiley')
+    memcache.delete('count_trainning_smiley')
+    query = Keyword.all()
+    query.filter('custome = ', True)
+    for c in query.fetch(1000):
+        c.senang = c.sedih = c.marah = c.malu = c.bersalah = c.jijik = c.takut = 0
+        c.put()
 
 def trainning_word():
     last_key = memcache.get('last_key_trainning_word')
@@ -155,7 +163,8 @@ def trainning_word():
 
 
 def get_fbfriends_cache(fbapi, count = 30):
-    friends = memcache.get('guest_friends_%d' % int(fbapi.uid))
+    user = users.get_current_user()
+    friends = memcache.get('guest_friends_%s_%d' % (user.nickname(),int(fbapi.uid)))
     if friends is not None:
         return friends
     else:
@@ -163,10 +172,11 @@ def get_fbfriends_cache(fbapi, count = 30):
                 '(SELECT uid2 FROM friend WHERE uid1 = %d) '\
                 'order by name limit 0,%d' % (int(fbapi.uid), count)
         friends = friends = fbapi.fql.query(fql)
-        memcache.set('guest_friends_%d' % int(fbapi.uid),friends,3600)
+        memcache.set('guest_friends_%s_%d' % (user.nickname(),int(fbapi.uid)),friends,3600)
         return friends
 
 def get_fbstates_cache(fbapi,uid, count = 20):
+    user = users.get_current_user()
     states = memcache.get('guest_states_%d' % uid)
     if states is not None:
         return states
@@ -174,3 +184,4 @@ def get_fbstates_cache(fbapi,uid, count = 20):
         states = get_states_with_emotion(fbapi.status.get(uid,count))
         memcache.set('guest_states_%d' % uid,states,3600)
         return states
+
