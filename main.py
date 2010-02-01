@@ -114,12 +114,12 @@ class InviteSuccessCanvasHandler(FacebookCanvasHandler,base.BaseRequestHandler):
     check_session = True
     def canvas(self):
         self.redirect('http://apps.facebook.com/emograph/canvas/invite.php')
-        states = get_states_with_emotion(self.facebook.status.get(uid,20))
-        chart = get_chart(states)
-        self.render('canvas/you.html',{'uid':uid,
-                                        'chart':chart,
-                                        'menu':get_menu('home'),
-                                        'states':states})
+        #states = get_states_with_emotion(self.facebook.status.get(uid,20))
+        #chart = get_chart(states)
+        #self.render('canvas/you.html',{'uid':uid,
+        #                                'chart':chart,
+        #                                'menu':get_menu('home'),
+        #                                'states':states})
 
 
 
